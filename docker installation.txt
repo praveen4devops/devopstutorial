@@ -1,0 +1,17 @@
+To link docker containers with other containers
+------------------------------------------------------
+
+$ docker run --name mydb -e MYSQL_ROOT_PASSWORD=test -d mysql:5.7.25
+
+
+$ docker run --name mywordpress --link mydb:mysql -d -p 8085:80 wordpress
+
+
+to install docker 
+
+---> get.docker.sh
+
+
+# This script is meant for quick & easy install via:
+#   $ curl -fsSL https://get.docker.com -o get-docker.sh
+#   $ sh get-docker.sh
