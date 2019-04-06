@@ -1,0 +1,106 @@
+To start using your cluster, you need to run the following as a regular user:
+
+  mkdir -p $HOME/.kube
+  sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+  sudo chown $(id -u):$(id -g) $HOME/.kube/config
+
+You should now deploy a pod network to the cluster.
+Run "kubectl apply -f [podnetwork].yaml" with one of the options listed at:
+  https://kubernetes.io/docs/concepts/cluster-administration/addons/
+
+Then you can join any number of worker nodes by running the following on each as root:
+
+
+ON NODE:
+--------------
+
+kubeadm join 172.31.30.70:6443 --token 6dytf6.t14v3ynl18jti8rx \
+    --discovery-token-ca-cert-hash sha256:1adcc3beb970a9b8f4e3188eac43fba077b07999c2180a147818ab76e19a4ec7
+
+
+
+ON MASTER
+---------------
+
+kubectl get nodes
+
+---> kubectl apply --filename https://git.io/weave-kube 1.6   to create the network on nodes and master
+
+
+
+mkdir foldername
+vi Dockerfile
+--> docker build -t imagename:1 .
+--->docker tag imagename:1 praveenindevops/imagename:1
+--->docker push praveenindevops/imagename:1
+---> vi rcfile.yml
+---->create a replication controllerfile(rc)
+ 
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  name: hello-rc   (rc name)
+spec:
+  replicas: 5
+  selector:
+    app: labelname (label name should be same in svc)
+  template:
+    metadata:
+      labels:
+        app: labelname (label name should be same in svc)
+    spec:
+      containers:
+      - name: hello-pod  (pod name)
+        image: image name (docker image name)
+        ports:
+        - containerPort: 8080 (tomcat port no)
+		
+----> kubectl create -f name of the yml file.yml
+
+---->create a service file 
+--->vi svc.yml
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: hello-svc   (service name)
+  labels:
+    app: labelname (label name should be same in svc)
+spec:
+  type: NodePort
+  ports:
+  - port: 8080 (tomcat port no)
+    nodePort: 30001  (our wish)
+    protocol: TCP
+  selector:
+    app: 	labelname (label name should be same in svc)	
+
+kubectl create -f servicename.yml
+		
+---?kubectl get svc
+
+----> kubectl get ep
+---->kubectl get pods
+
+
+-		
+		
+		
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
